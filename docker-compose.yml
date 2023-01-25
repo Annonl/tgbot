@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: "financedb"
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+  bot:
+    image: annonl/tgbot
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    environment:
+      host: "host.docker.internal"
+      port: 5432
+      user:
+      password:
+      dbname: "financedb"
+      tokenApi: 
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
