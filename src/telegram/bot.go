@@ -56,7 +56,7 @@ func (b *TelegramBot) Start() {
 
 			params := strings.Split(msg.Text, " ")
 
-			notificationTime, errTime := time.Parse("02.01.2006", params[1])
+			notificationTime, errTime := time.Parse("02.01.2006", params[len(params) - 1])
 			log.Println(notificationTime)
 			if errTime != nil {
 				log.Panic(errTime)
@@ -64,7 +64,7 @@ func (b *TelegramBot) Start() {
 
 			errResult := b.repo.SetNotification(repository.Notification{
 				ChatId:           update.Message.Chat.ID,
-				Message:          params[0],
+				Message:          strings.Join(params[:len(params)-1], " "),
 				NotificationDate: notificationTime})
 
 			if errResult != nil {
